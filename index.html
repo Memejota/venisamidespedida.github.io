@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Una noche para celebrar · 11 de diciembre</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#14102b;--bg2:#1f1840;--ink:#f6efe6;--mute:#b9b1cf;--gold:#f2c46d;--pink:#ff7a8a;--card:rgba(255,255,255,.06);--line:rgba(255,255,255,.14);
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+:root[data-theme="light"]{}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(1200px 600px at 80% -10%,#3a2368 0,transparent 60%),radial-gradient(900px 500px at -10% 30%,#5a2350 0,transparent 55%),var(--bg);color:var(--ink);font:400 17px/1.6 "DM Sans",system-ui,sans-serif;min-height:100%}
+main{max-width:680px;margin:0 auto;padding:0 22px 80px}
+.hero{text-align:center;padding:72px 0 36px}
+.eyebrow{letter-spacing:.32em;text-transform:uppercase;font-size:12px;color:var(--gold);font-weight:700}
+h1{font:600 clamp(44px,12vw,84px)/.98 "Fraunces",Georgia,serif;margin:18px 0 14px;letter-spacing:-.02em}
+h1 em{font-style:italic;font-weight:400;color:var(--pink)}
+.sub{color:var(--mute);font-size:18px;max-width:30em;margin:0 auto}
+.count{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:34px 0 10px}
+.count div{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px 4px}
+.count b{display:block;font:600 clamp(30px,9vw,50px)/1 "Fraunces",Georgia,serif;color:var(--gold);font-variant-numeric:tabular-nums}
+.count span{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--mute)}
+.done{display:none;text-align:center;font:italic 400 26px "Fraunces",serif;color:var(--gold);margin:30px 0}
+.story p{margin:0 0 16px}
+.story .big{font:italic 400 24px/1.4 "Fraunces",Georgia,serif;color:var(--ink);margin:26px 0}
+.details{display:grid;gap:12px;margin:34px 0}
+.details div{display:flex;gap:16px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px 20px}
+.details .ic{font-size:26px}
+.details small{display:block;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--mute)}
+.details strong{font:600 21px "Fraunces",serif}
+.entry{background:linear-gradient(135deg,rgba(242,196,109,.16),rgba(255,122,138,.14));border:1px solid rgba(242,196,109,.4);border-radius:22px;padding:22px;text-align:center;margin-bottom:34px}
+.entry b{font:600 38px "Fraunces",serif;color:var(--gold);display:block}
+.closing{text-align:center;margin:40px 0 28px;font:400 22px/1.5 "Fraunces",serif}
+.closing strong{display:block;font-size:34px;color:var(--pink);margin-top:10px;font-style:italic;font-weight:400}
+form,.thanks{background:var(--card);border:1px solid var(--line);border-radius:24px;padding:24px}
+label{display:block;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--mute);margin:16px 0 6px}
+label:first-of-type{margin-top:0}
+input[type=text],input[type=number],textarea{width:100%;background:rgba(0,0,0,.25);border:1px solid var(--line);color:var(--ink);border-radius:12px;padding:13px 14px;font:inherit}
+input:focus,textarea:focus,button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.opts input{position:absolute;opacity:0}
+.opts span{display:block;text-align:center;padding:14px 8px;border:1px solid var(--line);border-radius:12px;cursor:pointer;background:rgba(0,0,0,.2)}
+.opts input:checked+span{background:var(--gold);color:#2a1b00;font-weight:700;border-color:var(--gold)}
+.opts input:focus-visible+span{outline:2px solid var(--gold);outline-offset:2px}
+button.go{width:100%;margin-top:22px;border:0;border-radius:14px;padding:16px;background:linear-gradient(90deg,var(--gold),var(--pink));color:#2a1230;font:700 17px "DM Sans",sans-serif;cursor:pointer}
+button.alt{background:none;border:1px solid var(--line);color:var(--ink);border-radius:12px;padding:10px 16px;font:inherit;cursor:pointer;margin-top:14px}
+.thanks{display:none;text-align:center}
+.thanks h2{font:600 30px "Fraunces",serif;margin:0 0 8px;color:var(--gold)}
+.err{color:var(--pink);font-size:14px;margin-top:10px;min-height:1em}
+#owner{display:none;margin-top:30px;font-size:15px}
+#owner h3{font:600 20px "Fraunces",serif;color:var(--gold)}
+#owner li{margin:4px 0}
+footer{text-align:center;color:var(--mute);font-size:13px;margin-top:40px}
+@media (prefers-reduced-motion:no-preference){.hero{animation:up .8s ease both}@keyframes up{from{opacity:0;transform:translateY(14px)}}}
+</style>
+</head>
+<body>
+<main>
+  <header class="hero">
+    <div class="eyebrow">Despedida + Recibida</div>
+    <h1>Una noche para <em>celebrar</em></h1>
+    <p class="sub">Me recibí. Me despido. Y celebro con ustedes.</p>
+    <div class="count" id="count" aria-live="off">
+      <div><b id="d">--</b><span>días</span></div>
+      <div><b id="h">--</b><span>horas</span></div>
+      <div><b id="m">--</b><span>min</span></div>
+      <div><b id="s">--</b><span>seg</span></div>
+    </div>
+    <div class="done" id="done">¡Hoy es el día! 🥂</div>
+  </header>
+
+  <section class="story">
+    <p>Después de tantos años de estudio, proyectos, entregas, noches sin dormir y muchísimo esfuerzo, llegó el momento de celebrar un gran logro: <strong>me recibí de Diseñadora Digital.</strong></p>
+    <p>Pero esta vez la celebración viene con algo más. También es una despedida, porque estoy a punto de comenzar una nueva etapa y emprender un nuevo camino en España.</p>
+    <p>Por eso quiero compartir esta noche con las personas que fueron parte de mi historia, que me acompañaron, me bancaron, me enseñaron, me hicieron reír y estuvieron presentes de una u otra manera durante todos estos años.</p>
+    <p class="big">Te invito a celebrar conmigo todo lo que termina, todo lo que empieza y, sobre todo, todo lo que todavía está por venir.</p>
+  </section>
+
+  <section class="details">
+    <div><span class="ic">📅</span><p style="margin:0"><small>Fecha</small><strong>11 de diciembre</strong></p></div>
+    <div><span class="ic">📍</span><p style="margin:0"><small>Lugar</small><strong>[LUGAR]</strong></p></div>
+    <div><span class="ic">🕘</span><p style="margin:0"><small>Hora</small><strong>[HORA]</strong></p></div>
+  </section>
+
+  <div class="entry">
+    <small style="letter-spacing:.2em;text-transform:uppercase;color:var(--mute);font-size:11px">Entrada</small>
+    <b>$20.000</b>
+    La entrada incluye comida + bebida para disfrutar durante toda la noche.
+  </div>
+
+  <p class="closing">No hace falta ningún motivo especial para juntarnos… pero esta vez tenemos varios.<strong>¿Venís a brindar conmigo? 🥂</strong></p>
+
+  <form id="form" novalidate>
+    <label for="nombre">Tu nombre</label>
+    <input type="text" id="nombre" autocomplete="name" maxlength="80" required>
+    <label>¿Venís?</label>
+    <div class="opts">
+      <label><input type="radio" name="va" value="si" checked><span>¡Obvio, voy! 🎉</span></label>
+      <label><input type="radio" name="va" value="no"><span>No puedo 💌</span></label>
+    </div>
+    <div id="cant">
+      <label for="n">¿Cuántas personas son (contándote)?</label>
+      <input type="number" id="n" min="1" max="6" value="1" inputmode="numeric">
+    </div>
+    <label for="msg">Un mensaje o aviso (opcional)</label>
+    <textarea id="msg" rows="3" maxlength="300" placeholder="Restricciones alimentarias, un saludo…"></textarea>
+    <button class="go" type="submit">Confirmar</button>
+    <div class="err" id="err" role="alert"></div>
+  </form>
+
+  <div class="thanks" id="thanks" role="status">
+    <h2 id="tt">¡Gracias!</h2>
+    <p id="tp" style="margin:0"></p>
+    <div id="fb" style="display:none">
+      <p style="color:var(--mute);font-size:15px">Para que me llegue tu respuesta, copiá este mensaje y mandámelo por WhatsApp:</p>
+      <textarea id="copytxt" rows="3" readonly></textarea>
+      <button class="alt" id="copy" type="button">Copiar mensaje</button>
+    </div>
+    <button class="alt" id="edit" type="button">Cambiar mi respuesta</button>
+  </div>
+
+  <section id="owner">
+    <h3>Respuestas (solo vos las ves)</h3>
+    <p id="tot" style="color:var(--mute)"></p>
+    <ul id="list"></ul>
+  </section>
+
+  <footer>Con cariño, Juli ✦</footer>
+</main>
+
+<script>
+(function(){
+  var target=new Date(2026,11,11,0,0,0).getTime();
+  var el={d:document.getElementById('d'),h:document.getElementById('h'),m:document.getElementById('m'),s:document.getElementById('s')};
+  function pad(x){return String(x).padStart(2,'0')}
+  function tick(){
+    var diff=target-Date.now();
+    if(diff<=0){document.getElementById('count').style.display='none';document.getElementById('done').style.display='block';return}
+    var sec=Math.floor(diff/1000);
+    el.d.textContent=Math.floor(sec/86400);
+    el.h.textContent=pad(Math.floor(sec%86400/3600));
+    el.m.textContent=pad(Math.floor(sec%3600/60));
+    el.s.textContent=pad(sec%60);
+  }
+  tick();setInterval(tick,1000);
+
+  var form=document.getElementById('form'),thanks=document.getElementById('thanks'),err=document.getElementById('err');
+  var db=null,uid=null,user=null;
+  var KEY='rsvp-juli-1211';
+  function store(v){try{if(v===undefined)return JSON.parse(localStorage.getItem(KEY)||'null');localStorage.setItem(KEY,JSON.stringify(v))}catch(e){return null}}
+
+  document.querySelectorAll('input[name=va]').forEach(function(r){r.addEventListener('change',function(){
+    document.getElementById('cant').style.display=document.querySelector('input[name=va]:checked').value==='si'?'block':'none'})});
+
+  function show(data,saved){
+    form.style.display='none';thanks.style.display='block';
+    var yes=data.va==='si';
+    document.getElementById('tt').textContent=yes?'¡Nos vemos el 11!':'Gracias por avisar';
+    document.getElementById('tp').textContent=yes?('Te anotamos, '+data.nombre+(data.n>1?' (+'+(data.n-1)+')':'')+'. ¡Vamos a brindar!'):'Te voy a extrañar. Gracias por avisarme 💌';
+    var fb=document.getElementById('fb');
+    if(!saved){
+      fb.style.display='block';
+      document.getElementById('copytxt').value='Hola Juli! Soy '+data.nombre+'. '+(yes?'Confirmo asistencia a tu despedida+recibida el 11/12 ('+data.n+' persona/s). ':'No voy a poder ir a tu despedida+recibida. ')+(data.msg||'');
+    } else fb.style.display='none';
+  }
+  document.getElementById('copy').onclick=function(){var t=document.getElementById('copytxt');t.select();try{navigator.clipboard.writeText(t.value)}catch(e){document.execCommand('copy')}this.textContent='¡Copiado!'};
+  document.getElementById('edit').onclick=function(){thanks.style.display='none';form.style.display='block'};
+
+  form.addEventListener('submit',async function(e){
+    e.preventDefault();err.textContent='';
+    var nombre=document.getElementById('nombre').value.trim();
+    if(!nombre){err.textContent='Contame tu nombre así sé quién sos 🙂';return}
+    var va=document.querySelector('input[name=va]:checked').value;
+    var n=va==='si'?Math.max(1,Math.min(6,parseInt(document.getElementById('n').value,10)||1)):0;
+    var data={nombre:nombre,va:va,n:n,msg:document.getElementById('msg').value.trim(),ts:Date.now()};
+    var saved=false;
+    if(db&&uid){try{await db.collection('rsvps').doc(uid).set(data);saved=true}catch(x){saved=false}}
+    store(data);show(data,saved);
+  });
+
+  var prev=store();
+  if(prev){document.getElementById('nombre').value=prev.nombre||''}
+
+  function initClaude(){
+    if(!window.claude||!claude.use)return;
+    Promise.all([claude.use('db'),claude.use('user')]).then(async function(r){
+      db=r[0];user=r[1];
+      if(!db||!user)return;
+      try{uid=String(await user.id())}catch(e){return}
+      try{
+        var mine=await db.collection('rsvps').doc(uid).get();
+        var v=mine&&(mine.data?mine.data():mine);
+        if(v&&v.nombre){document.getElementById('nombre').value=v.nombre}
+      }catch(e){}
+      if(user.isOwner&&user.isOwner()){
+        document.getElementById('owner').style.display='block';
+        try{
+          db.collection('rsvps').onSnapshot(function(snap){
+            var rows=[];snap.forEach(function(d){rows.push(d.data?d.data():d)});
+            var yes=rows.filter(function(x){return x.va==='si'});
+            var total=yes.reduce(function(a,x){return a+(x.n||1)},0);
+            document.getElementById('tot').textContent=total+' personas confirmadas · '+rows.length+' respuestas';
+            var ul=document.getElementById('list');ul.textContent='';
+            rows.sort(function(a,b){return (b.ts||0)-(a.ts||0)}).forEach(function(x){
+              var li=document.createElement('li');
+              li.textContent=(x.va==='si'?'✅ ':'❌ ')+x.nombre+(x.va==='si'?' ('+x.n+')':'')+(x.msg?' — '+x.msg:'');
+              ul.appendChild(li)});
+          });
+        }catch(e){}
+      }
+    }).catch(function(){});
+  }
+  initClaude();
+})();
+</script>
+</body>
+</html>
