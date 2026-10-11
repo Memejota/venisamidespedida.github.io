@@ -52,9 +52,6 @@ a.alt{display:inline-block;text-decoration:none}
 .thanks{display:none;text-align:center}
 .thanks h2{font:600 30px "Fraunces",serif;margin:0 0 8px;color:var(--gold)}
 .err{color:var(--pink);font-size:14px;margin-top:10px;min-height:1em}
-#owner{display:none;margin-top:30px;font-size:15px}
-#owner h3{font:600 20px "Fraunces",serif;color:var(--gold)}
-#owner li{margin:4px 0}
 footer{text-align:center;color:var(--mute);font-size:13px;margin-top:40px}
 @media (prefers-reduced-motion:no-preference){.hero{animation:up .8s ease both}@keyframes up{from{opacity:0;transform:translateY(14px)}}}
 </style>
@@ -116,18 +113,8 @@ footer{text-align:center;color:var(--mute);font-size:13px;margin-top:40px}
   <div class="thanks" id="thanks" role="status">
     <h2 id="tt">¡Gracias!</h2>
     <p id="tp" style="margin:0"></p>
-    <div id="fb" style="display:none">
-      <p style="color:var(--mute);font-size:15px">Para que me llegue tu respuesta, mandámela por WhatsApp:</p>
-      <a class="alt" id="wa" href="#" target="_blank" rel="noopener">Enviar por WhatsApp</a>
-    </div>
     <button class="alt" id="edit" type="button">Cambiar mi respuesta</button>
   </div>
-
-  <section id="owner">
-    <h3>Respuestas (solo vos las ves)</h3>
-    <p id="tot" style="color:var(--mute)"></p>
-    <ul id="list"></ul>
-  </section>
 
   <footer>Con cariño, Juli</footer>
 </main>
@@ -149,24 +136,19 @@ footer{text-align:center;color:var(--mute);font-size:13px;margin-top:40px}
   tick();setInterval(tick,1000);
 
   var form=document.getElementById('form'),thanks=document.getElementById('thanks'),err=document.getElementById('err');
-  var db=null,uid=null,user=null;
-  var KEY='rsvp-juli-1211';
-  function store(v){try{if(v===undefined)return JSON.parse(localStorage.getItem(KEY)||'null');localStorage.setItem(KEY,JSON.stringify(v))}catch(e){return null}}
+  // Reemplazá esta dirección por la URL de tu implementación de Google Apps Script que termina en /exec.
+  var SHEETS_URL='https://script.google.com/macros/s/AKfycbwFM0lGe-XxYhw4owpOqptCZzL3SLLbiZo3Bvd9LupCKQPXXci-0D1SBwCLp3mbl8lo/exec';
+  var KEY='rsvp-juli-1211-nombre';
+  function guardarNombre(nombre){try{localStorage.setItem(KEY,nombre)}catch(e){}}
 
   document.querySelectorAll('input[name=va]').forEach(function(r){r.addEventListener('change',function(){
     document.getElementById('cant').style.display=document.querySelector('input[name=va]:checked').value==='si'?'block':'none'})});
 
-  function show(data,saved){
+  function show(data){
     form.style.display='none';thanks.style.display='block';
     var yes=data.va==='si';
     document.getElementById('tt').textContent=yes?'¡Nos vemos el 11!':'Gracias por avisar';
-    document.getElementById('tp').textContent=yes?('Te anotamos, '+data.nombre+(data.n>1?' (+'+(data.n-1)+')':'')+'. ¡Vamos a brindar!'):'Te voy a extrañar. Gracias por avisarme 💌';
-    var fb=document.getElementById('fb');
-    if(!saved){
-      fb.style.display='block';
-      var texto='Hola Juli! Soy '+data.nombre+'. '+(yes?'Confirmo asistencia a tu despedida+recibida el 11/12 ('+data.n+' persona/s). ':'No voy a poder ir a tu despedida+recibida. ')+(data.msg||'');
-      document.getElementById('wa').href='https://wa.me/5493424780504?text='+encodeURIComponent(texto);
-    } else fb.style.display='none';
+    document.getElementById('tp').textContent=yes?('Gracias por confirmar, '+data.nombre+(data.n>1?' (+'+(data.n-1)+')':'')+'. ¡Vamos a brindar!'):'Gracias por avisarme, '+data.nombre+'. Te voy a extrañar.';
   }
   document.getElementById('edit').onclick=function(){thanks.style.display='none';form.style.display='block'};
 
@@ -177,44 +159,28 @@ footer{text-align:center;color:var(--mute);font-size:13px;margin-top:40px}
     var va=document.querySelector('input[name=va]:checked').value;
     var n=va==='si'?Math.max(1,Math.min(6,parseInt(document.getElementById('n').value,10)||1)):0;
     var data={nombre:nombre,va:va,n:n,msg:document.getElementById('msg').value.trim(),ts:Date.now()};
-    var saved=false;
-    if(db&&uid){try{await db.collection('rsvps').doc(uid).set(data);saved=true}catch(x){saved=false}}
-    store(data);show(data,saved);
+    if(!SHEETS_URL || SHEETS_URL.indexOf('/exec')===-1){
+      err.textContent='Falta configurar la conexión con Google Sheets. Revisá la URL de Apps Script.';
+      return;
+    }
+    try{
+      await fetch(SHEETS_URL,{
+        method:'POST',
+        mode:'no-cors',
+        headers:{'Content-Type':'text/plain;charset=utf-8'},
+        body:JSON.stringify(data)
+      });
+      guardarNombre(nombre);
+      show(data);
+    }catch(error){
+      err.textContent='No se pudo enviar la respuesta. Intentá nuevamente.';
+    }
   });
 
-  var prev=store();
-  if(prev){document.getElementById('nombre').value=prev.nombre||''}
-
-  function initClaude(){
-    if(!window.claude||!claude.use)return;
-    Promise.all([claude.use('db'),claude.use('user')]).then(async function(r){
-      db=r[0];user=r[1];
-      if(!db||!user)return;
-      try{uid=String(await user.id())}catch(e){return}
-      try{
-        var mine=await db.collection('rsvps').doc(uid).get();
-        var v=mine&&(mine.data?mine.data():mine);
-        if(v&&v.nombre){document.getElementById('nombre').value=v.nombre}
-      }catch(e){}
-      if(user.isOwner&&user.isOwner()){
-        document.getElementById('owner').style.display='block';
-        try{
-          db.collection('rsvps').onSnapshot(function(snap){
-            var rows=[];snap.forEach(function(d){rows.push(d.data?d.data():d)});
-            var yes=rows.filter(function(x){return x.va==='si'});
-            var total=yes.reduce(function(a,x){return a+(x.n||1)},0);
-            document.getElementById('tot').textContent=total+' personas confirmadas · '+rows.length+' respuestas';
-            var ul=document.getElementById('list');ul.textContent='';
-            rows.sort(function(a,b){return (b.ts||0)-(a.ts||0)}).forEach(function(x){
-              var li=document.createElement('li');
-              li.textContent=(x.va==='si'?'✅ ':'❌ ')+x.nombre+(x.va==='si'?' ('+x.n+')':'')+(x.msg?' — '+x.msg:'');
-              ul.appendChild(li)});
-          });
-        }catch(e){}
-      }
-    }).catch(function(){});
-  }
-  initClaude();
+  try{
+    var prev=localStorage.getItem(KEY);
+    if(prev){document.getElementById('nombre').value=prev}
+  }catch(e){}
 })();
 </script>
 </body>
