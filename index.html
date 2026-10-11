@@ -40,14 +40,15 @@ form,.thanks{background:var(--card);border:1px solid var(--line);border-radius:2
 label{display:block;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--mute);margin:16px 0 6px}
 label:first-of-type{margin-top:0}
 input[type=text],input[type=number],textarea{width:100%;background:rgba(0,0,0,.25);border:1px solid var(--line);color:var(--ink);border-radius:12px;padding:13px 14px;font:inherit}
-input:focus,textarea:focus,button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+input:focus,textarea:focus,button:focus-visible,a.alt:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 .opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .opts input{position:absolute;opacity:0}
 .opts span{display:block;text-align:center;padding:14px 8px;border:1px solid var(--line);border-radius:12px;cursor:pointer;background:rgba(0,0,0,.2)}
 .opts input:checked+span{background:var(--gold);color:#2a1b00;font-weight:700;border-color:var(--gold)}
 .opts input:focus-visible+span{outline:2px solid var(--gold);outline-offset:2px}
 button.go{width:100%;margin-top:22px;border:0;border-radius:14px;padding:16px;background:linear-gradient(90deg,var(--gold),var(--pink));color:#2a1230;font:700 17px "DM Sans",sans-serif;cursor:pointer}
-button.alt{background:none;border:1px solid var(--line);color:var(--ink);border-radius:12px;padding:10px 16px;font:inherit;cursor:pointer;margin-top:14px}
+button.alt,a.alt{background:none;border:1px solid var(--line);color:var(--ink);border-radius:12px;padding:10px 16px;font:inherit;cursor:pointer;margin-top:14px}
+a.alt{display:inline-block;text-decoration:none}
 .thanks{display:none;text-align:center}
 .thanks h2{font:600 30px "Fraunces",serif;margin:0 0 8px;color:var(--gold)}
 .err{color:var(--pink);font-size:14px;margin-top:10px;min-height:1em}
@@ -116,9 +117,8 @@ footer{text-align:center;color:var(--mute);font-size:13px;margin-top:40px}
     <h2 id="tt">¡Gracias!</h2>
     <p id="tp" style="margin:0"></p>
     <div id="fb" style="display:none">
-      <p style="color:var(--mute);font-size:15px">Para que me llegue tu respuesta, copiá este mensaje y mandámelo por WhatsApp:</p>
-      <textarea id="copytxt" rows="3" readonly></textarea>
-      <button class="alt" id="copy" type="button">Copiar mensaje</button>
+      <p style="color:var(--mute);font-size:15px">Para que me llegue tu respuesta, mandámela por WhatsApp:</p>
+      <a class="alt" id="wa" href="#" target="_blank" rel="noopener">Enviar por WhatsApp</a>
     </div>
     <button class="alt" id="edit" type="button">Cambiar mi respuesta</button>
   </div>
@@ -164,10 +164,10 @@ footer{text-align:center;color:var(--mute);font-size:13px;margin-top:40px}
     var fb=document.getElementById('fb');
     if(!saved){
       fb.style.display='block';
-      document.getElementById('copytxt').value='Hola Juli! Soy '+data.nombre+'. '+(yes?'Confirmo asistencia a tu despedida+recibida el 11/12 ('+data.n+' persona/s). ':'No voy a poder ir a tu despedida+recibida. ')+(data.msg||'');
+      var texto='Hola Juli! Soy '+data.nombre+'. '+(yes?'Confirmo asistencia a tu despedida+recibida el 11/12 ('+data.n+' persona/s). ':'No voy a poder ir a tu despedida+recibida. ')+(data.msg||'');
+      document.getElementById('wa').href='https://wa.me/5493424780504?text='+encodeURIComponent(texto);
     } else fb.style.display='none';
   }
-  document.getElementById('copy').onclick=function(){var t=document.getElementById('copytxt');t.select();try{navigator.clipboard.writeText(t.value)}catch(e){document.execCommand('copy')}this.textContent='¡Copiado!'};
   document.getElementById('edit').onclick=function(){thanks.style.display='none';form.style.display='block'};
 
   form.addEventListener('submit',async function(e){
